@@ -49,8 +49,8 @@ x-airflow-common:
   # In order to add custom dependencies or upgrade provider packages you can use your extended image.
   # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
-  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.10.5}
-  # build: .
+  #image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.10.5}
+  build: .
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
@@ -303,6 +303,8 @@ services:
       - MINIO_ROOT_USER=minioadmin  # Set your MinIO root user
       - MINIO_ROOT_PASSWORD=minioadmin123  # Set your MinIO root password
     command: server /data --console-address ":9001"
+    env_file:
+      - .env
     ports:
       - "9000:9000"  # API port
       - "9001:9001"  # Console port
@@ -326,6 +328,14 @@ services:
       - minio_data:/data
     restart: unless-stopped
 
+  spark:
+    image: bitnami/spark:latest
+    environment:
+      - SPARK_MODE=master
+
 volumes:
   postgres-db-volume:
   minio_data:
+
+networks:
+  minio:
