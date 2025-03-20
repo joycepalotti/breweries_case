@@ -1,0 +1,250 @@
+[2025-03-20T11:03:55.031+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-03-20T11:03:55.128+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ETL_breweries_list.clean_data manual__2025-03-20T10:59:45.608726+00:00 [queued]>
+[2025-03-20T11:03:55.169+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ETL_breweries_list.clean_data manual__2025-03-20T10:59:45.608726+00:00 [queued]>
+[2025-03-20T11:03:55.170+0000] {taskinstance.py:2867} INFO - Starting attempt 2 of 2
+[2025-03-20T11:03:55.339+0000] {taskinstance.py:2890} INFO - Executing <Task(PythonOperator): clean_data> on 2025-03-20 10:59:45.608726+00:00
+[2025-03-20T11:03:55.452+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=704) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-03-20T11:03:55.474+0000] {standard_task_runner.py:72} INFO - Started process 713 to run task
+[2025-03-20T11:03:55.418+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'ETL_breweries_list', 'clean_data', 'manual__2025-03-20T10:59:45.608726+00:00', '--job-id', '121', '--raw', '--subdir', 'DAGS_FOLDER/breweries_list_etl.py', '--cfg-path', '/tmp/tmpyrefw107']
+[2025-03-20T11:03:55.495+0000] {standard_task_runner.py:105} INFO - Job 121: Subtask clean_data
+[2025-03-20T11:03:55.748+0000] {task_command.py:467} INFO - Running <TaskInstance: ETL_breweries_list.clean_data manual__2025-03-20T10:59:45.608726+00:00 [running]> on host db435bd7841b
+[2025-03-20T11:03:56.128+0000] {taskinstance.py:3134} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='ETL_breweries_list' AIRFLOW_CTX_TASK_ID='clean_data' AIRFLOW_CTX_EXECUTION_DATE='2025-03-20T10:59:45.608726+00:00' AIRFLOW_CTX_TRY_NUMBER='2' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-20T10:59:45.608726+00:00'
+[2025-03-20T11:03:56.137+0000] {logging_mixin.py:190} INFO - Task instance is in running state
+[2025-03-20T11:03:56.140+0000] {logging_mixin.py:190} INFO -  Previous state of the Task instance: queued
+[2025-03-20T11:03:56.141+0000] {logging_mixin.py:190} INFO - Current task name:clean_data state:running start_date:2025-03-20 11:03:55.129661+00:00
+[2025-03-20T11:03:56.142+0000] {logging_mixin.py:190} INFO - Dag name:ETL_breweries_list and current dag run status:running
+[2025-03-20T11:03:56.142+0000] {taskinstance.py:732} INFO - ::endgroup::
+[2025-03-20T11:03:56.355+0000] {breweries_list_etl.py:119} INFO - Data successfully read from bronze bucket
+[2025-03-20T11:04:45.291+0000] {job.py:229} INFO - Heartbeat recovered after 11.95 seconds
+[2025-03-20T11:05:28.167+0000] {taskinstance.py:3313} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 768, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 734, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 424, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 238, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 256, in execute_callable
+    return runner.run(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/breweries_list_etl.py", line 147, in fetch_and_clean_data
+    df = spark.read.schema(schema).csv(bronze_data)
+         ^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/pyspark/sql/session.py", line 1706, in read
+    return DataFrameReader(self)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/pyspark/sql/readwriter.py", line 70, in __init__
+    self._jreader = spark._jsparkSession.read()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+                   ^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+           ^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/py4j/protocol.py", line 326, in get_return_value
+    raise Py4JJavaError(
+py4j.protocol.Py4JJavaError: An error occurred while calling o25.read.
+: java.lang.IllegalStateException: LiveListenerBus is stopped.
+	at org.apache.spark.scheduler.LiveListenerBus.addToQueue(LiveListenerBus.scala:92)
+	at org.apache.spark.scheduler.LiveListenerBus.addToStatusQueue(LiveListenerBus.scala:75)
+	at org.apache.spark.sql.internal.SharedState.<init>(SharedState.scala:115)
+	at org.apache.spark.sql.SparkSession.$anonfun$sharedState$1(SparkSession.scala:143)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.spark.sql.SparkSession.sharedState$lzycompute(SparkSession.scala:143)
+	at org.apache.spark.sql.SparkSession.sharedState(SparkSession.scala:142)
+	at org.apache.spark.sql.SparkSession.$anonfun$sessionState$2(SparkSession.scala:162)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.spark.sql.SparkSession.sessionState$lzycompute(SparkSession.scala:160)
+	at org.apache.spark.sql.SparkSession.sessionState(SparkSession.scala:157)
+	at org.apache.spark.sql.DataFrameReader.<init>(DataFrameReader.scala:699)
+	at org.apache.spark.sql.SparkSession.read(SparkSession.scala:783)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)
+	at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:374)
+	at py4j.Gateway.invoke(Gateway.java:282)
+	at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+	at py4j.commands.CallCommand.execute(CallCommand.java:79)
+	at py4j.ClientServerConnection.waitForCommands(ClientServerConnection.java:182)
+	at py4j.ClientServerConnection.run(ClientServerConnection.java:106)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+
+[2025-03-20T11:05:28.189+0000] {logging_mixin.py:190} INFO - Task instance in failure state
+[2025-03-20T11:05:28.190+0000] {logging_mixin.py:190} INFO - Task start:2025-03-20 11:03:55.129661+00:00 end:2025-03-20 11:05:28.187848+00:00 duration:93.058187
+[2025-03-20T11:05:28.190+0000] {logging_mixin.py:190} INFO - Task:<Task(PythonOperator): clean_data> dag:<DAG: ETL_breweries_list> dagrun:<DagRun ETL_breweries_list @ 2025-03-20 10:59:45.608726+00:00: manual__2025-03-20T10:59:45.608726+00:00, state:running, queued_at: 2025-03-20 10:59:45.739676+00:00. externally triggered: True>
+[2025-03-20T11:05:28.191+0000] {logging_mixin.py:190} INFO - Failure caused by An error occurred while calling o25.read.
+: java.lang.IllegalStateException: LiveListenerBus is stopped.
+	at org.apache.spark.scheduler.LiveListenerBus.addToQueue(LiveListenerBus.scala:92)
+	at org.apache.spark.scheduler.LiveListenerBus.addToStatusQueue(LiveListenerBus.scala:75)
+	at org.apache.spark.sql.internal.SharedState.<init>(SharedState.scala:115)
+	at org.apache.spark.sql.SparkSession.$anonfun$sharedState$1(SparkSession.scala:143)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.spark.sql.SparkSession.sharedState$lzycompute(SparkSession.scala:143)
+	at org.apache.spark.sql.SparkSession.sharedState(SparkSession.scala:142)
+	at org.apache.spark.sql.SparkSession.$anonfun$sessionState$2(SparkSession.scala:162)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.spark.sql.SparkSession.sessionState$lzycompute(SparkSession.scala:160)
+	at org.apache.spark.sql.SparkSession.sessionState(SparkSession.scala:157)
+	at org.apache.spark.sql.DataFrameReader.<init>(DataFrameReader.scala:699)
+	at org.apache.spark.sql.SparkSession.read(SparkSession.scala:783)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)
+	at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:374)
+	at py4j.Gateway.invoke(Gateway.java:282)
+	at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+	at py4j.commands.CallCommand.execute(CallCommand.java:79)
+	at py4j.ClientServerConnection.waitForCommands(ClientServerConnection.java:182)
+	at py4j.ClientServerConnection.run(ClientServerConnection.java:106)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+[2025-03-20T11:05:28.192+0000] {taskinstance.py:1226} INFO - Marking task as FAILED. dag_id=ETL_breweries_list, task_id=clean_data, run_id=manual__2025-03-20T10:59:45.608726+00:00, execution_date=20250320T105945, start_date=20250320T110355, end_date=20250320T110528
+[2025-03-20T11:05:28.233+0000] {taskinstance.py:341} INFO - ::group::Post task execution logs
+[2025-03-20T11:05:28.234+0000] {standard_task_runner.py:124} ERROR - Failed to execute job 121 for task clean_data (An error occurred while calling o25.read.
+: java.lang.IllegalStateException: LiveListenerBus is stopped.
+	at org.apache.spark.scheduler.LiveListenerBus.addToQueue(LiveListenerBus.scala:92)
+	at org.apache.spark.scheduler.LiveListenerBus.addToStatusQueue(LiveListenerBus.scala:75)
+	at org.apache.spark.sql.internal.SharedState.<init>(SharedState.scala:115)
+	at org.apache.spark.sql.SparkSession.$anonfun$sharedState$1(SparkSession.scala:143)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.spark.sql.SparkSession.sharedState$lzycompute(SparkSession.scala:143)
+	at org.apache.spark.sql.SparkSession.sharedState(SparkSession.scala:142)
+	at org.apache.spark.sql.SparkSession.$anonfun$sessionState$2(SparkSession.scala:162)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.spark.sql.SparkSession.sessionState$lzycompute(SparkSession.scala:160)
+	at org.apache.spark.sql.SparkSession.sessionState(SparkSession.scala:157)
+	at org.apache.spark.sql.DataFrameReader.<init>(DataFrameReader.scala:699)
+	at org.apache.spark.sql.SparkSession.read(SparkSession.scala:783)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)
+	at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:374)
+	at py4j.Gateway.invoke(Gateway.java:282)
+	at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+	at py4j.commands.CallCommand.execute(CallCommand.java:79)
+	at py4j.ClientServerConnection.waitForCommands(ClientServerConnection.java:182)
+	at py4j.ClientServerConnection.run(ClientServerConnection.java:106)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+; 713)
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py", line 117, in _start_by_fork
+    ret = args.func(args, dag=self.dag)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/cli_config.py", line 49, in command
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/cli.py", line 116, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 483, in task_run
+    task_return_code = _run_task_by_selected_method(args, _dag, ti)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 256, in _run_task_by_selected_method
+    return _run_raw_task(args, ti)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 341, in _run_raw_task
+    return ti._run_raw_task(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/session.py", line 97, in wrapper
+    return func(*args, session=session, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3006, in _run_raw_task
+    return _run_raw_task(
+           ^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 274, in _run_raw_task
+    TaskInstance._execute_task_with_callbacks(
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3161, in _execute_task_with_callbacks
+    result = self._execute_task(context, task_orig)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3185, in _execute_task
+    return _execute_task(self, context, task_orig)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 768, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 734, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 424, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 238, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 256, in execute_callable
+    return runner.run(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/breweries_list_etl.py", line 147, in fetch_and_clean_data
+    df = spark.read.schema(schema).csv(bronze_data)
+         ^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/pyspark/sql/session.py", line 1706, in read
+    return DataFrameReader(self)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/pyspark/sql/readwriter.py", line 70, in __init__
+    self._jreader = spark._jsparkSession.read()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+                   ^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+           ^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/py4j/protocol.py", line 326, in get_return_value
+    raise Py4JJavaError(
+py4j.protocol.Py4JJavaError: An error occurred while calling o25.read.
+: java.lang.IllegalStateException: LiveListenerBus is stopped.
+	at org.apache.spark.scheduler.LiveListenerBus.addToQueue(LiveListenerBus.scala:92)
+	at org.apache.spark.scheduler.LiveListenerBus.addToStatusQueue(LiveListenerBus.scala:75)
+	at org.apache.spark.sql.internal.SharedState.<init>(SharedState.scala:115)
+	at org.apache.spark.sql.SparkSession.$anonfun$sharedState$1(SparkSession.scala:143)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.spark.sql.SparkSession.sharedState$lzycompute(SparkSession.scala:143)
+	at org.apache.spark.sql.SparkSession.sharedState(SparkSession.scala:142)
+	at org.apache.spark.sql.SparkSession.$anonfun$sessionState$2(SparkSession.scala:162)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.spark.sql.SparkSession.sessionState$lzycompute(SparkSession.scala:160)
+	at org.apache.spark.sql.SparkSession.sessionState(SparkSession.scala:157)
+	at org.apache.spark.sql.DataFrameReader.<init>(DataFrameReader.scala:699)
+	at org.apache.spark.sql.SparkSession.read(SparkSession.scala:783)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)
+	at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:374)
+	at py4j.Gateway.invoke(Gateway.java:282)
+	at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+	at py4j.commands.CallCommand.execute(CallCommand.java:79)
+	at py4j.ClientServerConnection.waitForCommands(ClientServerConnection.java:182)
+	at py4j.ClientServerConnection.run(ClientServerConnection.java:106)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+
+[2025-03-20T11:05:28.258+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 1
+[2025-03-20T11:05:28.294+0000] {taskinstance.py:3901} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-03-20T11:05:28.303+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
