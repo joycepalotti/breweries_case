@@ -9,9 +9,9 @@ import logging
 from airflow import models
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, upper, when, regexp_replace
-from pyspark.sql.types import StructType, StructField, StringType, DecimalType
+from airflow.exceptions import AirflowException
+from airflow.providers.postgres.operators.postgres import PostgresOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 minio_client = Minio(
     "minio:9000",
@@ -100,8 +100,8 @@ def load_to_minio(ti):
 
 # 3) Transform data to parquet and partition it by brewery location
 
-def fetch_and_clean_data(ti):
-    # Define the path in MinIO where the data must be read from (bucket: 'bronze')
+def clean_and_load_data():
+    # Get current date based on Sao Paulo timezone
     tz_brasilia = pytz.timezone("America/Sao_Paulo")
     current_date = datetime.now(tz_brasilia)
     current_year = current_date.strftime("%Y")
@@ -110,88 +110,40 @@ def fetch_and_clean_data(ti):
 
     minio_path = f"{current_year}/{current_month}/{current_day}/breweries_{current_year}{current_month}{current_day}.csv"
 
-    # Get the data from the csv file
+    # Get the data from MinIO bronze bucket
     try:
-        bronze_data = minio_client.get_object(
-            bucket_name='bronze',
-            object_name=minio_path,
-        )
+        response = minio_client.get_object(bucket_name='bronze', object_name=minio_path)
+        df = pd.read_csv(response)
         logging.info("Data successfully read from bronze bucket")
-    except:
-        logging.error("Failed to get the data from the bronze bucket") 
+    except Exception as e:
+        logging.error(f"Failed to get the data from the bronze bucket: {e}")
+        return
 
-    # Create a spark session
-    spark = SparkSession.builder.appName("BreweryDataProcessing").master("spark://spark:7077").getOrCreate()
+    # 1 - Remove entries with null 'id'
+    df = df.dropna(subset=["id"])
 
-    # Set the schema for the dataframe
-    schema = StructType([
-        StructField("id", StringType()),
-        StructField("name", StringType()),
-        StructField("brewery_type", StringType()),
-        StructField("address_1", StringType()),
-        StructField("address_2", StringType()),
-        StructField("address_3", StringType()),
-        StructField("city", StringType()),
-        StructField("state_province", StringType()),
-        StructField("postal_code", StringType()),
-        StructField("country", StringType()),
-        StructField("longitude", DecimalType(10, 8)),
-        StructField("latitude", DecimalType(10, 8)),
-        StructField("phone", StringType()),
-        StructField("website_url", StringType()),
-        StructField("state", StringType()),
-        StructField("street", StringType())
-    ])
+    # 2 - Standirdize some columns with upper case
+    cols_to_upper = ["name", "brewery_type", "city", "state_province", "country", "state"]
+    df[cols_to_upper] = df[cols_to_upper].apply(lambda x: x.str.upper())
 
-    # Read data from csv format
-    df = spark.read.schema(schema).csv(bronze_data)
+    # 3 - Replace null values by 'UNKNOWN' in some columns
+    df.fillna({"brewery_type": "UNKNOWN", "city": "UNKNOWN", "state_province": "UNKNOWN", "country": "UNKNOWN", "state": "UNKNOWN"}, inplace=True)
 
-    # 1 - Remove any entries that have null 'id' column (which is the primary key)
-    df = df.filter(df["id"].isNotNull())
+    # 4 - Clean up the 'phone' columns, removing non-numerical characters
+    df["phone"] = df["phone"].astype(str).str.replace(r"[^0-9]", "", regex=True)
 
-    # 2 - Standardize 'name', 'brewery_type', 'city', 'state_province', 'country' and 'state' to upper case
-    df = df.withColumn("name", upper(col("name"))) \
-       .withColumn("brewery_type", upper(col("brewery_type"))) \
-       .withColumn("city", upper(col("city"))) \
-       .withColumn("state_province", upper(col("state_province"))) \
-       .withColumn("country", upper(col("country"))) \
-       .withColumn("state", upper(col("state")))
-    
-    # 3 - Substitute null values by 'UNKNOWN' in the columns 'brewery_type', 'city', 'state_province', 'country' and 'state'
-    df = df.withColumn("brewery_type", when(col("brewery_type").isNull(), "UNKNOWN").otherwise(col("brewery_type"))) \
-        .withColumn("city", when(col("city").isNull(), "UNKNOWN").otherwise(col("city"))) \
-        .withColumn("state_province", when(col("state_province").isNull(), "UNKNOWN").otherwise(col("state_province"))) \
-        .withColumn("country", when(col("country").isNull(), "UNKNOWN").otherwise(col("country"))) \
-        .withColumn("state", when(col("state").isNull(), "UNKNOWN").otherwise(col("state")))
+    # Lis country/state possible combinations
+    country_state_groups = df.groupby(["country", "state"])
 
-    # 4 - Clean 'phone' column removing any special character
-    df = df.withColumn("phone", regexp_replace(col("phone"), "[^0-9]", ""))
-
-    # Push the DataFrame to XCom
-    ti.xcom_push(key='transformed_data', value=df)
-
-def partition_and_load_data(ti):
-    df = ti.xcom_pull(key='transformed_data', task_ids='clean_data')
-
-    # Partition the dataframe by 'country' and 'state'
-    country_state_list = df.select("country","state").distinct().collect()
-
-    for row in country_state_list:
-        country = row["country"]
-        state = row["state"]
-        
-        # Filter specific data
-        df_partition = df.filter((col("country") == country) & (col("state") == state))
-
-        # Convert data to parquet format
+    for (country, state), group_df in country_state_groups:
         buffer = io.BytesIO()
-        df_partition.write.parquet(buffer)
+        group_df.to_parquet(buffer, index=False)
         buffer.seek(0)
 
-        # Set path in MinIO silver bucket 
+        # Define MinIO's path (silver bucket)
         minio_path = f"silver/{country}/{state}/breweries.parquet"
 
-        # Save file to MinIO
+        # Salvar arquivo no MinIO
         try:
             minio_client.put_object(
                 bucket_name="silver",
@@ -200,11 +152,101 @@ def partition_and_load_data(ti):
                 length=buffer.getbuffer().nbytes,
                 content_type="application/parquet"
             )
-            logging.info(f"Data of size {len(buffer.getbuffer().nbytes)} bytes was successfully saved to {minio_path}")
+            logging.info(f"Data saved successfully to {minio_path}")
         except Exception as e:
             logging.error(f"Could not save the data to MinIO: {e}")
 
+# 4) Fetch the data from the silver bucket and create the aggregated view
+def create_aggregated_view(ti):
+    try:
+        # List all the objects inside the "silver" bucket
+        objects = minio_client.list_objects(bucket_name="silver", recursive=True)
 
+        # List to store all DataFrames
+        df_list = []
+
+        # Iterate over the object list and read Parquet files
+        for obj in objects:
+            if obj.object_name.endswith(".parquet"):
+                response = minio_client.get_object(bucket_name="silver", object_name=obj.object_name)
+                data = io.BytesIO(response.read())
+                df = pd.read_parquet(data)
+                df_list.append(df)
+                logging.info(f"Fetched {obj.object_name}")
+
+        # Check if we loaded any data
+        if not df_list:
+            logging.warning("No data found in the silver bucket")
+            return
+
+        # Concatenate all dataframes into one
+        aggregated_df = pd.concat(df_list, ignore_index=True)
+
+        # Create aggregated view: count breweries per country/state
+        aggregated_view = aggregated_df.groupby(["country", "state", "brewery_type"]) \
+                                       .size() \
+                                       .reset_index(name="brewery_count")
+
+        # Convert to Parquet format
+        buffer = io.BytesIO()
+        aggregated_view.to_parquet(buffer, index=False)
+        buffer.seek(0)
+
+        # Save the aggregated file to MinIO (gold layer)
+        minio_path = "view_aggregated_breweries.parquet"
+        minio_client.put_object(
+            bucket_name="gold",
+            object_name=minio_path,
+            data=buffer,
+            length=buffer.getbuffer().nbytes,
+            content_type="application/parquet"
+        )
+        logging.info(f"Aggregated view successfully saved to {minio_path}")
+        
+        # Push the aggregated view to XCom
+        ti.xcom_push(key='aggregated_df', value=aggregated_view.to_dict())
+
+    except Exception as e:
+        logging.error(f"Failed to create aggregated view: {e}")
+
+# 5) Save view into Postgres database
+def store_view_into_postgres(ti):
+    try:
+        breweries_dict = ti.xom_pull(key='aggregated_df', task_ids='create_view_and_load_to_gold')
+
+        if not breweries_dict:
+            logging.error("No data was found in the view")
+        
+        postgres_hook = PostgresHook(postgres_conn_id='brewery_connection')
+        insert_query = """
+        INSERT INTO brewery_type_per_location (country, state, brewery_type, brewery_count)
+        VALUES (%s, %s, %s, %i)
+        ON CONFLICT (country, state, brewery_type) DO UPDATE
+        SET brewery_count = EXCLUDED.brewery_count;
+        """
+
+        for row in breweries_dict:
+            postgres_hook.run(insert_query, parameters=(row['country'], row['state'], row['brewery_type'], row['brewery_count']))
+
+        logging.info("Aggregated data successfully inserted into PostgreSQL")
+
+    except Exception as e:
+        logging.error(f"Failed to insert aggregated data: {e}")
+
+
+# 6) Create a wathcer task to monitor tasks' errors
+def watcher(**context):
+    ti = context['ti']
+    dag_run = ti.get_dagrun()
+    failed_tasks = [t for t in dag_run.get_task_instances() if t.state == 'failed']
+
+    if failed_tasks:
+        logging.error("A task in the DAG has failed!")
+        for task in failed_tasks:
+            logging.error(f"Task {task.task_id} failed.")
+        raise AirflowException("The DAG failed because one or mores task failed")
+    else:
+        logging.info("All tasks ran successfully!")
 
 # Declare DAG
 default_args = {
@@ -216,7 +258,7 @@ default_args = {
 
 dag = models.DAG(
     dag_id='ETL_breweries_list',
-    description= 'DAG to ...',
+    description= 'Simple DAG to organize the brewery listing data following a medallion architecture.',
     schedule="0 04 * * *",
     start_date = datetime.today() - timedelta(days=1),
     catchup=False,
@@ -244,16 +286,36 @@ load_to_bronze = PythonOperator(
     dag=dag,
 )
 
-clean_data = PythonOperator(
-    task_id='clean_data',
-    python_callable=fetch_and_clean_data,
+clean_and_load_to_silver = PythonOperator(
+    task_id='clean_and_load_to_silver_layer',
+    python_callable=clean_and_load_data,
+    dag=dag
+)
+
+create_view_and_load_to_gold = PythonOperator(
+    task_id='create_view_and_load_to_gold',
+    python_callable=create_aggregated_view,
+    dag=dag
+)
+
+create_table_task = PostgresOperator(
+    task_id='create_table',
+    postgres_conn_id='brewery_connection',
+    sql="""
+    CREATE TABLE IF NOT EXISTS brewery_type_per_location (
+        country TEXT,
+        state TEXT,
+        brewery_type TEXT,
+        brewery_count INTEGER
+    );
+    """,
     dag=dag,
 )
 
-load_to_silver = PythonOperator(
-    task_id='load_to_silver_layer',
-    python_callable=partition_and_load_data,
-    dag=dag,
+load_data_to_postgres = PythonOperator(
+    task_id='load_view_into_postgres',
+    python_callable=store_view_into_postgres,
+    dag=dag
 )
 
 end = BashOperator(
@@ -263,5 +325,13 @@ end = BashOperator(
     trigger_rule="all_done"
 )
 
+monitor_errors = PythonOperator(
+    task_id="watcher_task",
+    python_callable=watcher,
+    provide_context=True,
+    dag=dag,
+    default_args={"retries":0}
+)
+
 # Tasks dependencies
-start >> extract_breweries_listing >> load_to_bronze >> clean_data >> load_to_silver >> end
+start >> extract_breweries_listing >> load_to_bronze >> clean_and_load_to_silver >> create_view_and_load_to_gold >> create_table_task >> load_data_to_postgres >> monitor_errors >> end

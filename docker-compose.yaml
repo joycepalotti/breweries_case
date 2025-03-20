@@ -328,14 +328,10 @@ services:
       - minio_data:/data
     restart: unless-stopped
 
-  spark:
-    image: bitnami/spark:latest
-    environment:
-      - SPARK_MODE=master
-
 volumes:
   postgres-db-volume:
   minio_data:
 
 networks:
   minio:
+  airflow:
