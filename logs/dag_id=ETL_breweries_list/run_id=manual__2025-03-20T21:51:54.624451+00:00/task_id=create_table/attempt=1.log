@@ -1,0 +1,41 @@
+[2025-03-20T21:53:58.023+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-03-20T21:53:58.078+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ETL_breweries_list.create_table manual__2025-03-20T21:51:54.624451+00:00 [queued]>
+[2025-03-20T21:53:58.101+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ETL_breweries_list.create_table manual__2025-03-20T21:51:54.624451+00:00 [queued]>
+[2025-03-20T21:53:58.102+0000] {taskinstance.py:2867} INFO - Starting attempt 1 of 2
+[2025-03-20T21:53:58.213+0000] {taskinstance.py:2890} INFO - Executing <Task(PostgresOperator): create_table> on 2025-03-20 21:51:54.624451+00:00
+[2025-03-20T21:53:58.230+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=320) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-03-20T21:53:58.233+0000] {standard_task_runner.py:72} INFO - Started process 322 to run task
+[2025-03-20T21:53:58.253+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'ETL_breweries_list', 'create_table', 'manual__2025-03-20T21:51:54.624451+00:00', '--job-id', '244', '--raw', '--subdir', 'DAGS_FOLDER/breweries_list_etl.py', '--cfg-path', '/tmp/tmpk2ukrkut']
+[2025-03-20T21:53:58.266+0000] {standard_task_runner.py:105} INFO - Job 244: Subtask create_table
+[2025-03-20T21:53:58.944+0000] {task_command.py:467} INFO - Running <TaskInstance: ETL_breweries_list.create_table manual__2025-03-20T21:51:54.624451+00:00 [running]> on host 5414e2764892
+[2025-03-20T21:53:59.210+0000] {taskinstance.py:3134} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='ETL_breweries_list' AIRFLOW_CTX_TASK_ID='create_table' AIRFLOW_CTX_EXECUTION_DATE='2025-03-20T21:51:54.624451+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-20T21:51:54.624451+00:00'
+[2025-03-20T21:53:59.211+0000] {logging_mixin.py:190} INFO - Task instance is in running state
+[2025-03-20T21:53:59.212+0000] {logging_mixin.py:190} INFO -  Previous state of the Task instance: queued
+[2025-03-20T21:53:59.212+0000] {logging_mixin.py:190} INFO - Current task name:create_table state:running start_date:2025-03-20 21:53:58.079396+00:00
+[2025-03-20T21:53:59.213+0000] {logging_mixin.py:190} INFO - Dag name:ETL_breweries_list and current dag run status:running
+[2025-03-20T21:53:59.213+0000] {taskinstance.py:732} INFO - ::endgroup::
+[2025-03-20T21:53:59.254+0000] {base.py:84} INFO - Retrieving connection 'brewery_connection'
+[2025-03-20T21:53:59.255+0000] {sql.py:186} WARNING - This setter is for backward compatibility and should not be used.
+Since the introduction of connection property, the providers listed below breaks due to assigning value to self.connection in their __init__ method.
+* apache-***-providers-mysql<5.7.1
+* apache-***-providers-elasticsearch<5.5.1
+* apache-***-providers-postgres<5.13.0
+[2025-03-20T21:53:59.268+0000] {sql.py:511} INFO - Running statement: 
+    CREATE TABLE IF NOT EXISTS brewery_type_per_location (
+        country TEXT,
+        state TEXT,
+        brewery_type TEXT,
+        brewery_count INTEGER
+    );
+    , parameters: None
+[2025-03-20T21:53:59.747+0000] {taskinstance.py:341} INFO - ::group::Post task execution logs
+[2025-03-20T21:53:59.748+0000] {taskinstance.py:353} INFO - Marking task as SUCCESS. dag_id=ETL_breweries_list, task_id=create_table, run_id=manual__2025-03-20T21:51:54.624451+00:00, execution_date=20250320T215154, start_date=20250320T215358, end_date=20250320T215359
+[2025-03-20T21:53:59.814+0000] {logging_mixin.py:190} INFO - Task instance in success state
+[2025-03-20T21:53:59.815+0000] {logging_mixin.py:190} INFO -  Previous state of the Task instance: running
+[2025-03-20T21:53:59.816+0000] {logging_mixin.py:190} INFO - Dag name:ETL_breweries_list queued_at:2025-03-20 21:51:54.950966+00:00
+[2025-03-20T21:53:59.816+0000] {logging_mixin.py:190} INFO - Task hostname:5414e2764892 operator:PostgresOperator
+[2025-03-20T21:53:59.847+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-03-20T21:54:00.348+0000] {taskinstance.py:3901} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2025-03-20T21:54:00.370+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

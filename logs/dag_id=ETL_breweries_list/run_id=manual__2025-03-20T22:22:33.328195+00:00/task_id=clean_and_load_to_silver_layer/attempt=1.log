@@ -1,0 +1,56 @@
+[2025-03-20T22:24:04.324+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-03-20T22:24:04.357+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ETL_breweries_list.clean_and_load_to_silver_layer manual__2025-03-20T22:22:33.328195+00:00 [queued]>
+[2025-03-20T22:24:04.375+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ETL_breweries_list.clean_and_load_to_silver_layer manual__2025-03-20T22:22:33.328195+00:00 [queued]>
+[2025-03-20T22:24:04.375+0000] {taskinstance.py:2867} INFO - Starting attempt 1 of 2
+[2025-03-20T22:24:04.398+0000] {taskinstance.py:2890} INFO - Executing <Task(PythonOperator): clean_and_load_to_silver_layer> on 2025-03-20 22:22:33.328195+00:00
+[2025-03-20T22:24:04.412+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'ETL_breweries_list', 'clean_and_load_to_silver_layer', 'manual__2025-03-20T22:22:33.328195+00:00', '--job-id', '260', '--raw', '--subdir', 'DAGS_FOLDER/breweries_list_etl.py', '--cfg-path', '/tmp/tmpknvuqvyi']
+[2025-03-20T22:24:04.413+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=747) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-03-20T22:24:04.414+0000] {standard_task_runner.py:105} INFO - Job 260: Subtask clean_and_load_to_silver_layer
+[2025-03-20T22:24:04.415+0000] {standard_task_runner.py:72} INFO - Started process 749 to run task
+[2025-03-20T22:24:04.750+0000] {task_command.py:467} INFO - Running <TaskInstance: ETL_breweries_list.clean_and_load_to_silver_layer manual__2025-03-20T22:22:33.328195+00:00 [running]> on host 5414e2764892
+[2025-03-20T22:24:04.881+0000] {taskinstance.py:3134} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='ETL_breweries_list' AIRFLOW_CTX_TASK_ID='clean_and_load_to_silver_layer' AIRFLOW_CTX_EXECUTION_DATE='2025-03-20T22:22:33.328195+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-20T22:22:33.328195+00:00'
+[2025-03-20T22:24:04.882+0000] {logging_mixin.py:190} INFO - Task instance is in running state
+[2025-03-20T22:24:04.882+0000] {logging_mixin.py:190} INFO -  Previous state of the Task instance: queued
+[2025-03-20T22:24:04.882+0000] {logging_mixin.py:190} INFO - Current task name:clean_and_load_to_silver_layer state:running start_date:2025-03-20 22:24:04.358594+00:00
+[2025-03-20T22:24:04.883+0000] {logging_mixin.py:190} INFO - Dag name:ETL_breweries_list and current dag run status:running
+[2025-03-20T22:24:04.883+0000] {taskinstance.py:732} INFO - ::endgroup::
+[2025-03-20T22:24:04.929+0000] {breweries_list_etl.py:117} INFO - Data successfully read from bronze bucket
+[2025-03-20T22:24:05.011+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/IRELAND/LAOIS/breweries.parquet
+[2025-03-20T22:24:05.029+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/ARIZONA/breweries.parquet
+[2025-03-20T22:24:05.043+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/CALIFORNIA/breweries.parquet
+[2025-03-20T22:24:05.062+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/COLORADO/breweries.parquet
+[2025-03-20T22:24:05.079+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/DELAWARE/breweries.parquet
+[2025-03-20T22:24:05.095+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/IDAHO/breweries.parquet
+[2025-03-20T22:24:05.117+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/ILLINOIS/breweries.parquet
+[2025-03-20T22:24:05.141+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/INDIANA/breweries.parquet
+[2025-03-20T22:24:05.169+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/IOWA/breweries.parquet
+[2025-03-20T22:24:05.187+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/MARYLAND/breweries.parquet
+[2025-03-20T22:24:05.219+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/MASSACHUSETTS/breweries.parquet
+[2025-03-20T22:24:05.238+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/MICHIGAN/breweries.parquet
+[2025-03-20T22:24:05.262+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/MINNESOTA/breweries.parquet
+[2025-03-20T22:24:05.287+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/MISSISSIPPI/breweries.parquet
+[2025-03-20T22:24:05.319+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/NEVADA/breweries.parquet
+[2025-03-20T22:24:05.345+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/NEW YORK/breweries.parquet
+[2025-03-20T22:24:05.360+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/NORTH CAROLINA/breweries.parquet
+[2025-03-20T22:24:05.375+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/OHIO/breweries.parquet
+[2025-03-20T22:24:05.392+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/OKLAHOMA/breweries.parquet
+[2025-03-20T22:24:05.410+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/OREGON/breweries.parquet
+[2025-03-20T22:24:05.441+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/PENNSYLVANIA/breweries.parquet
+[2025-03-20T22:24:05.456+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/SOUTH CAROLINA/breweries.parquet
+[2025-03-20T22:24:05.469+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/TEXAS/breweries.parquet
+[2025-03-20T22:24:05.483+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/VERMONT/breweries.parquet
+[2025-03-20T22:24:05.498+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/VIRGINIA/breweries.parquet
+[2025-03-20T22:24:05.513+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/WASHINGTON/breweries.parquet
+[2025-03-20T22:24:05.528+0000] {breweries_list_etl.py:155} INFO - Data saved successfully to silver/UNITED STATES/WISCONSIN/breweries.parquet
+[2025-03-20T22:24:05.528+0000] {python.py:240} INFO - Done. Returned value was: None
+[2025-03-20T22:24:05.538+0000] {taskinstance.py:341} INFO - ::group::Post task execution logs
+[2025-03-20T22:24:05.539+0000] {taskinstance.py:353} INFO - Marking task as SUCCESS. dag_id=ETL_breweries_list, task_id=clean_and_load_to_silver_layer, run_id=manual__2025-03-20T22:22:33.328195+00:00, execution_date=20250320T222233, start_date=20250320T222404, end_date=20250320T222405
+[2025-03-20T22:24:05.580+0000] {logging_mixin.py:190} INFO - Task instance in success state
+[2025-03-20T22:24:05.581+0000] {logging_mixin.py:190} INFO -  Previous state of the Task instance: running
+[2025-03-20T22:24:05.581+0000] {logging_mixin.py:190} INFO - Dag name:ETL_breweries_list queued_at:2025-03-20 22:22:33.960581+00:00
+[2025-03-20T22:24:05.581+0000] {logging_mixin.py:190} INFO - Task hostname:5414e2764892 operator:PythonOperator
+[2025-03-20T22:24:05.597+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-03-20T22:24:05.858+0000] {taskinstance.py:3901} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2025-03-20T22:24:05.865+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

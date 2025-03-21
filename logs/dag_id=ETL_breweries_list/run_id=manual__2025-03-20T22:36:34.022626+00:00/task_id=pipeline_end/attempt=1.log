@@ -1,0 +1,32 @@
+[2025-03-20T22:37:57.117+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-03-20T22:37:57.139+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ETL_breweries_list.pipeline_end manual__2025-03-20T22:36:34.022626+00:00 [queued]>
+[2025-03-20T22:37:57.154+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ETL_breweries_list.pipeline_end manual__2025-03-20T22:36:34.022626+00:00 [queued]>
+[2025-03-20T22:37:57.154+0000] {taskinstance.py:2867} INFO - Starting attempt 1 of 2
+[2025-03-20T22:37:57.172+0000] {taskinstance.py:2890} INFO - Executing <Task(BashOperator): pipeline_end> on 2025-03-20 22:36:34.022626+00:00
+[2025-03-20T22:37:57.182+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=972) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-03-20T22:37:57.185+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'ETL_breweries_list', 'pipeline_end', 'manual__2025-03-20T22:36:34.022626+00:00', '--job-id', '274', '--raw', '--subdir', 'DAGS_FOLDER/breweries_list_etl.py', '--cfg-path', '/tmp/tmpf4fshdlh']
+[2025-03-20T22:37:57.197+0000] {standard_task_runner.py:72} INFO - Started process 974 to run task
+[2025-03-20T22:37:57.197+0000] {standard_task_runner.py:105} INFO - Job 274: Subtask pipeline_end
+[2025-03-20T22:37:58.207+0000] {task_command.py:467} INFO - Running <TaskInstance: ETL_breweries_list.pipeline_end manual__2025-03-20T22:36:34.022626+00:00 [running]> on host 5414e2764892
+[2025-03-20T22:37:58.323+0000] {taskinstance.py:3134} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='ETL_breweries_list' AIRFLOW_CTX_TASK_ID='pipeline_end' AIRFLOW_CTX_EXECUTION_DATE='2025-03-20T22:36:34.022626+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-20T22:36:34.022626+00:00'
+[2025-03-20T22:37:58.324+0000] {logging_mixin.py:190} INFO - Task instance is in running state
+[2025-03-20T22:37:58.326+0000] {logging_mixin.py:190} INFO -  Previous state of the Task instance: queued
+[2025-03-20T22:37:58.326+0000] {logging_mixin.py:190} INFO - Current task name:pipeline_end state:running start_date:2025-03-20 22:37:57.140276+00:00
+[2025-03-20T22:37:58.327+0000] {logging_mixin.py:190} INFO - Dag name:ETL_breweries_list and current dag run status:running
+[2025-03-20T22:37:58.328+0000] {taskinstance.py:732} INFO - ::endgroup::
+[2025-03-20T22:37:58.329+0000] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2025-03-20T22:37:58.330+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', 'echo "PIPELINE ENDED"; sleep 15']
+[2025-03-20T22:37:58.349+0000] {subprocess.py:99} INFO - Output:
+[2025-03-20T22:37:58.351+0000] {subprocess.py:106} INFO - PIPELINE ENDED
+[2025-03-20T22:38:15.781+0000] {subprocess.py:110} INFO - Command exited with return code 0
+[2025-03-20T22:38:15.830+0000] {taskinstance.py:341} INFO - ::group::Post task execution logs
+[2025-03-20T22:38:15.831+0000] {taskinstance.py:353} INFO - Marking task as SUCCESS. dag_id=ETL_breweries_list, task_id=pipeline_end, run_id=manual__2025-03-20T22:36:34.022626+00:00, execution_date=20250320T223634, start_date=20250320T223757, end_date=20250320T223815
+[2025-03-20T22:38:15.879+0000] {logging_mixin.py:190} INFO - Task instance in success state
+[2025-03-20T22:38:15.880+0000] {logging_mixin.py:190} INFO -  Previous state of the Task instance: running
+[2025-03-20T22:38:15.881+0000] {logging_mixin.py:190} INFO - Dag name:ETL_breweries_list queued_at:2025-03-20 22:36:34.381649+00:00
+[2025-03-20T22:38:15.884+0000] {logging_mixin.py:190} INFO - Task hostname:5414e2764892 operator:BashOperator
+[2025-03-20T22:38:15.929+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-03-20T22:38:15.955+0000] {taskinstance.py:3901} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-03-20T22:38:15.958+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

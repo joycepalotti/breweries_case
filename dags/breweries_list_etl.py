@@ -122,7 +122,7 @@ def clean_and_load_data():
     # 1 - Remove entries with null 'id'
     df = df.dropna(subset=["id"])
 
-    # 2 - Standirdize some columns with upper case
+    # 2 - Standardize some columns with upper case
     cols_to_upper = ["name", "brewery_type", "city", "state_province", "country", "state"]
     df[cols_to_upper] = df[cols_to_upper].apply(lambda x: x.str.upper())
 
@@ -212,20 +212,26 @@ def create_aggregated_view(ti):
 # 5) Save view into Postgres database
 def store_view_into_postgres(ti):
     try:
-        breweries_dict = ti.xom_pull(key='aggregated_df', task_ids='create_view_and_load_to_gold')
+        breweries_dict = ti.xcom_pull(key='aggregated_df', task_ids='create_view_and_load_to_gold')
 
         if not breweries_dict:
             logging.error("No data was found in the view")
+
+        # Convert to DataFrame
+        df = pd.DataFrame(breweries_dict)
+
+        # Transform it to a list of dictionaries
+        breweries_list = df.to_dict(orient="records")
         
         postgres_hook = PostgresHook(postgres_conn_id='brewery_connection')
         insert_query = """
         INSERT INTO brewery_type_per_location (country, state, brewery_type, brewery_count)
-        VALUES (%s, %s, %s, %i)
+        VALUES (%s, %s, %s, %s)
         ON CONFLICT (country, state, brewery_type) DO UPDATE
         SET brewery_count = EXCLUDED.brewery_count;
         """
 
-        for row in breweries_dict:
+        for row in breweries_list:
             postgres_hook.run(insert_query, parameters=(row['country'], row['state'], row['brewery_type'], row['brewery_count']))
 
         logging.info("Aggregated data successfully inserted into PostgreSQL")

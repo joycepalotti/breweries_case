@@ -1,0 +1,37 @@
+[2025-03-20T22:37:45.717+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-03-20T22:37:45.743+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ETL_breweries_list.load_view_into_postgres manual__2025-03-20T22:36:34.022626+00:00 [queued]>
+[2025-03-20T22:37:45.761+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ETL_breweries_list.load_view_into_postgres manual__2025-03-20T22:36:34.022626+00:00 [queued]>
+[2025-03-20T22:37:45.762+0000] {taskinstance.py:2867} INFO - Starting attempt 1 of 2
+[2025-03-20T22:37:45.816+0000] {taskinstance.py:2890} INFO - Executing <Task(PythonOperator): load_view_into_postgres> on 2025-03-20 22:36:34.022626+00:00
+[2025-03-20T22:37:45.835+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'ETL_breweries_list', 'load_view_into_postgres', 'manual__2025-03-20T22:36:34.022626+00:00', '--job-id', '272', '--raw', '--subdir', 'DAGS_FOLDER/breweries_list_etl.py', '--cfg-path', '/tmp/tmpm39vaazx']
+[2025-03-20T22:37:45.836+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=964) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-03-20T22:37:45.838+0000] {standard_task_runner.py:105} INFO - Job 272: Subtask load_view_into_postgres
+[2025-03-20T22:37:45.838+0000] {standard_task_runner.py:72} INFO - Started process 966 to run task
+[2025-03-20T22:37:46.173+0000] {task_command.py:467} INFO - Running <TaskInstance: ETL_breweries_list.load_view_into_postgres manual__2025-03-20T22:36:34.022626+00:00 [running]> on host 5414e2764892
+[2025-03-20T22:37:46.263+0000] {taskinstance.py:3134} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='ETL_breweries_list' AIRFLOW_CTX_TASK_ID='load_view_into_postgres' AIRFLOW_CTX_EXECUTION_DATE='2025-03-20T22:36:34.022626+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-20T22:36:34.022626+00:00'
+[2025-03-20T22:37:46.265+0000] {logging_mixin.py:190} INFO - Task instance is in running state
+[2025-03-20T22:37:46.266+0000] {logging_mixin.py:190} INFO -  Previous state of the Task instance: queued
+[2025-03-20T22:37:46.266+0000] {logging_mixin.py:190} INFO - Current task name:load_view_into_postgres state:running start_date:2025-03-20 22:37:45.744604+00:00
+[2025-03-20T22:37:46.266+0000] {logging_mixin.py:190} INFO - Dag name:ETL_breweries_list and current dag run status:running
+[2025-03-20T22:37:46.267+0000] {taskinstance.py:732} INFO - ::endgroup::
+[2025-03-20T22:37:46.279+0000] {breweries_list_etl.py:217} INFO - Tipo de breweries_dict: <class 'dict'>
+[2025-03-20T22:37:46.280+0000] {breweries_list_etl.py:218} INFO - Conteúdo de breweries_dict: {'country': {'0': 'IRELAND', '1': 'UNITED STATES', '2': 'UNITED STATES', '3': 'UNITED STATES', '4': 'UNITED STATES', '5': 'UNITED STATES', '6': 'UNITED STATES', '7': 'UNITED STATES', '8': 'UNITED STATES', '9': 'UNITED STATES', '10': 'UNITED STATES', '11': 'UNITED STATES', '12': 'UNITED STATES', '13': 'UNITED STATES', '14': 'UNITED STATES', '15': 'UNITED STATES', '16': 'UNITED STATES', '17': 'UNITED STATES', '18': 'UNITED STATES', '19': 'UNITED STATES', '20': 'UNITED STATES', '21': 'UNITED STATES', '22': 'UNITED STATES', '23': 'UNITED STATES', '24': 'UNITED STATES', '25': 'UNITED STATES', '26': 'UNITED STATES', '27': 'UNITED STATES', '28': 'UNITED STATES', '29': 'UNITED STATES', '30': 'UNITED STATES', '31': 'UNITED STATES', '32': 'UNITED STATES', '33': 'UNITED STATES', '34': 'UNITED STATES', '35': 'UNITED STATES'}, 'state': {'0': 'LAOIS', '1': 'ARIZONA', '2': 'CALIFORNIA', '3': 'CALIFORNIA', '4': 'CALIFORNIA', '5': 'COLORADO', '6': 'COLORADO', '7': 'COLORADO', '8': 'COLORADO', '9': 'DELAWARE', '10': 'IDAHO', '11': 'ILLINOIS', '12': 'INDIANA', '13': 'IOWA', '14': 'MARYLAND', '15': 'MASSACHUSETTS', '16': 'MICHIGAN', '17': 'MINNESOTA', '18': 'MISSISSIPPI', '19': 'NEVADA', '20': 'NEW YORK', '21': 'NORTH CAROLINA', '22': 'NORTH CAROLINA', '23': 'OHIO', '24': 'OHIO', '25': 'OKLAHOMA', '26': 'OREGON', '27': 'OREGON', '28': 'PENNSYLVANIA', '29': 'SOUTH CAROLINA', '30': 'TEXAS', '31': 'VERMONT', '32': 'VIRGINIA', '33': 'WASHINGTON', '34': 'WASHINGTON', '35': 'WISCONSIN'}, 'brewery_type': {'0': 'MICRO', '1': 'MICRO', '2': 'CLOSED', '3': 'LARGE', '4': 'MICRO', '5': 'BREWPUB', '6': 'LARGE', '7': 'MICRO', '8': 'PROPRIETOR', '9': 'MICRO', '10': 'LARGE', '11': 'MICRO', '12': 'MICRO', '13': 'MICRO', '14': 'CONTRACT', '15': 'MICRO', '16': 'MICRO', '17': 'MICRO', '18': 'MICRO', '19': 'MICRO', '20': 'BREWPUB', '21': 'BREWPUB', '22': 'MICRO', '23': 'BREWPUB', '24': 'MICRO', '25': 'MICRO', '26': 'BREWPUB', '27': 'LARGE', '28': 'MICRO', '29': 'BREWPUB', '30': 'MICRO', '31': 'MICRO', '32': 'MICRO', '33': 'CLOSED', '34': 'MICRO', '35': 'MICRO'}, 'brewery_count': {'0': 1, '1': 3, '2': 1, '3': 1, '4': 2, '5': 1, '6': 1, '7': 1, '8': 1, '9': 1, '10': 1, '11': 1, '12': 3, '13': 1, '14': 1, '15': 1, '16': 1, '17': 3, '18': 1, '19': 1, '20': 2, '21': 1, '22': 1, '23': 1, '24': 1, '25': 1, '26': 2, '27': 4, '28': 1, '29': 1, '30': 2, '31': 1, '32': 1, '33': 1, '34': 1, '35': 2}}
+[2025-03-20T22:37:46.292+0000] {base.py:84} INFO - Retrieving connection 'brewery_connection'
+[2025-03-20T22:37:46.293+0000] {sql.py:186} WARNING - This setter is for backward compatibility and should not be used.
+Since the introduction of connection property, the providers listed below breaks due to assigning value to self.connection in their __init__ method.
+* apache-***-providers-mysql<5.7.1
+* apache-***-providers-elasticsearch<5.5.1
+* apache-***-providers-postgres<5.13.0
+[2025-03-20T22:37:46.293+0000] {breweries_list_etl.py:237} ERROR - Failed to insert aggregated data: string indices must be integers, not 'str'
+[2025-03-20T22:37:46.294+0000] {python.py:240} INFO - Done. Returned value was: None
+[2025-03-20T22:37:46.307+0000] {taskinstance.py:341} INFO - ::group::Post task execution logs
+[2025-03-20T22:37:46.307+0000] {taskinstance.py:353} INFO - Marking task as SUCCESS. dag_id=ETL_breweries_list, task_id=load_view_into_postgres, run_id=manual__2025-03-20T22:36:34.022626+00:00, execution_date=20250320T223634, start_date=20250320T223745, end_date=20250320T223746
+[2025-03-20T22:37:46.338+0000] {logging_mixin.py:190} INFO - Task instance in success state
+[2025-03-20T22:37:46.339+0000] {logging_mixin.py:190} INFO -  Previous state of the Task instance: running
+[2025-03-20T22:37:46.339+0000] {logging_mixin.py:190} INFO - Dag name:ETL_breweries_list queued_at:2025-03-20 22:36:34.381649+00:00
+[2025-03-20T22:37:46.339+0000] {logging_mixin.py:190} INFO - Task hostname:5414e2764892 operator:PythonOperator
+[2025-03-20T22:37:46.377+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-03-20T22:37:46.610+0000] {taskinstance.py:3901} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2025-03-20T22:37:46.612+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
