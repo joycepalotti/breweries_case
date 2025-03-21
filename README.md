@@ -26,5 +26,45 @@ Following the principles of the medallion architecture, the DAGs on Airflow were
   After these transformations the data was partitioned by country and state, and saved into the silver layer as parquet, following the struture *'silver/country/state/breweries.parquet'*
 - *create_view_and_load_to_gold:* after storing the data patitioned by country and state, in this step I loop through the files combining their data to perform a group by operation in the end withrespect to country, state, and brewery type. And to finish I count the number of breweries within each partition. the resultant table is stored as parquet in the gold layer of MinIO data lake.
 - *create_table:* this is a simple DAG built by PostgresOperator to create the table *'brewery_type_per_location.sql'* in the SQL database.
-- *load_view_into_postgres:* uses the aggregated dataframe as source for a loop of "INSERT INTO" commands, that fill the table lines. Below is the resultant table on Pgadmin, with
-- ![view_postgres](https://github.com/user-attachments/assets/01563f19-1cab-46f4-b487-c4e4481f851c)
+- *load_view_into_postgres:* uses the aggregated dataframe as source for a loop of "INSERT INTO" commands, that fill the table lines. Below is the resultant table on Pgadmin, with 36 rows:
+
+![view_postgres](https://github.com/user-attachments/assets/01563f19-1cab-46f4-b487-c4e4481f851c)
+
+- *monitor_error:* this DAG was implemented to force the failing of the pipeline in case that any of the previous tasks produced an error.
+- *end_pipeline:* DAG that will be executed always (no matter the success or failures of the previous ones) to record the end of the pipeline execution.
+
+## 3) How to run the solution locally
+
+Start by making sure that you have Docker, or similar installed in your notebook. Open the Visual Studio Code, or any other code IDE of your choice, and creating a virtual environment within the project folder and activating it.
+
+After that, clone my repository to your project folder using git. The next step would be to run the command:
+```
+docker-compose up -d --build
+```
+
+So that the variables and configuration from the *docker-compose.yml* and *Dockerfile* are set. After some minutes, you will be able tou open the Airflow on your browser by accessing:
+```
+http://localhost:8080/
+```
+To access the MinIO repository, with the three medallion layers already created, access:
+```
+http://localhost:9001/
+```
+And lastly, access the following port to get to Pgadmin:
+```
+http://localhost:5050/
+```
+After that you just need to play the pipeline in Airflow. Besides, this pipeline is triggered to run daily at 04am UTC. When you are finished, do not forget to run:
+```
+docker-compose down
+```
+
+## 4) Further Improvements
+
+There are some points of improvements that still could be explored withing this project. I would highlight:
+1) Security: implement at least environment variables in Airflow which could be used to store credential, but ideally it would better trying to connect an external secrets bank to store usernames and passwords.
+2) Modularization: there is still plenty of room to evolving with regards to this topic, so that the variables could be easily changed in one single place and that would reflect throughout the project.
+3) Escalability: reflecting about increasing the data volume and how this project could be run in production environment could bring insights when it comes to structure, software selection and code language.
+
+
+
