@@ -971,3 +971,10 @@
 [2025-03-21T01:11:50.403+0000] {logging_mixin.py:190} INFO - [2025-03-21T01:11:50.403+0000] {dag.py:3239} INFO - Sync 1 DAGs
 [2025-03-21T01:11:50.482+0000] {logging_mixin.py:190} INFO - [2025-03-21T01:11:50.482+0000] {dag.py:4180} INFO - Setting next_dagrun for ETL_breweries_list to 2025-03-20 04:00:00+00:00, run_after=2025-03-21 04:00:00+00:00
 [2025-03-21T01:11:50.584+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/breweries_list_etl.py took 1.829 seconds
+[2025-03-21T01:12:21.201+0000] {processor.py:186} INFO - Started process (PID=26317) to work on /opt/airflow/dags/breweries_list_etl.py
+[2025-03-21T01:12:21.215+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/breweries_list_etl.py for tasks to queue
+[2025-03-21T01:12:21.216+0000] {logging_mixin.py:190} INFO - [2025-03-21T01:12:21.216+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/breweries_list_etl.py
+[2025-03-21T01:12:21.675+0000] {processor.py:925} INFO - DAG(s) 'ETL_breweries_list' retrieved from /opt/airflow/dags/breweries_list_etl.py
+[2025-03-21T01:12:21.879+0000] {logging_mixin.py:190} INFO - [2025-03-21T01:12:21.879+0000] {dag.py:3239} INFO - Sync 1 DAGs
+[2025-03-21T01:12:21.995+0000] {logging_mixin.py:190} INFO - [2025-03-21T01:12:21.966+0000] {dag.py:4180} INFO - Setting next_dagrun for ETL_breweries_list to 2025-03-20 04:00:00+00:00, run_after=2025-03-21 04:00:00+00:00
+[2025-03-21T01:12:22.130+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/breweries_list_etl.py took 0.943 seconds
